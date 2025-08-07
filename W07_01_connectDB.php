@@ -1,30 +1,43 @@
 <?php
-//connect database ด้วย mysqli
-$host = "localhost"; // ชื่อโฮสต์
-$username = "root"; // ชื่อผู้ใช้
-$password = ""; // รหัสผ่าน
-$database = "d68s_product"; // ชื่อฐานข้อมูล
+// connect database ด้วย mysqli
 
-
-
+// $host = 'localhost';
+// $username = 'root';
+// $password = '';
+// $database = 'db68s_product';
 
 // $conn = new mysqli($host, $username, $password, $database);
+
 
 // if ($conn->connect_error) {
 //     die("Connection failed: " . $conn->connect_error);
 // } else {
-// echo "Connected successfully to the database: $database";
+//     echo "Connected successfully";
 // }
-$dns = "mysql:host=$host;dbname=$database;charset=utf8mb4"; // Data Source Name (DSN) for PDO
+
+
+// connect database ด้วย PDO
+
+$host = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'db68s_product';
+
+$dns = "mysql:host=$host;dbname=$database";
+
 try {
-    // Create a new PDO instance
-    $conn = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+    // $conn = new PDO("mysql:host=$host;dbname=$database", $username, $password);
+    $conn = new PDO($dns, $username, $password);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo " PD0 Connected successfully ";
+    // echo "PDO Connected successfully";
 } catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+    echo "PDO Connection failed: " . $e->getMessage();
 }
+
+
+
+
 
 
 ?>

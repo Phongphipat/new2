@@ -19,7 +19,7 @@
         </form>
 
     <div>
-        <!--แสดงผลลัพท์-->
+        
        
         <?php
          $get_number = $_POST["number"] ?? null;

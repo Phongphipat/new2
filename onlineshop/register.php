@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $hashed = password_hash($pw_in, PASSWORD_DEFAULT);
                 // หมายเหตุ: คง role = 'admin' ตามโค้ดเดิมของคุณ
-                $sql = "INSERT INTO users (username, full_name, email, password, role) VALUES (?, ?, ?, ?, 'admin')";
+                $sql = "INSERT INTO users (username, full_name, email, password, role) VALUES (?, ?, ?, ?, 'member')";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute([$username_in, $name_in, $email_in, $hashed]);
 

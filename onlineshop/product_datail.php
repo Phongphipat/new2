@@ -4,8 +4,8 @@ require_once 'config.php'; // เชื่อมต่อฐานข้อม�
 
 // ตรวจสอบว่ามีการส่ง id สินค้าเข้ามาหรือไม่
 if (!isset($_GET['id'])) {
-    header("Location: index.php");
-    exit;
+  header("Location: index.php");
+  exit;
 }
 
 $product_id = $_GET['id'];
@@ -22,14 +22,23 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // ถ้าไม่พบสินค้า
 if (!$product) {
-    echo "<h3 class='text-danger text-center mt-5'>❌ ไม่พบสินค้าที่คุณต้องการ</h3>";
-    exit;
+  echo "<h3 class='text-danger text-center mt-5'>❌ ไม่พบสินค้าที่คุณต้องการ</h3>";
+  exit;
 }
 
 $isLoggedIn = isset($_SESSION['user_id']);
+
+
+
+
+// เตรียมรูป
+$img = !empty($product['image'])
+  ? 'product_images/' . rawurlencode($product['image'])
+  : 'product_images/no-image.jpg';
 ?>
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <title>รายละเอียดสินค้า</title>
@@ -85,36 +94,40 @@ $isLoggedIn = isset($_SESSION['user_id']);
     }
   </style>
 </head>
+
 <body class="container mt-4">
 
   <a href="index.php" class="btn btn-secondary back-btn mb-3">← กลับหน้ารายการสินค้า</a>
 
   <div class="card product-card">
     <div class="card-body">
-      <h3 class="product-title"><?= htmlspecialchars($product['product_name']) ?></h3>
-      <h6 class="text-muted mb-3">หมวดหมู่: <?= htmlspecialchars($product['category_name']) ?></h6>
+      <div class="text-center mb-4">
+        <img src="<?= $img ?>" alt="<?= htmlspecialchars($product['product_name']) ?>" class="img-fluid"
+          style="max-height: 300px; border-radius: 10px;">
+        <h3 class="product-title"><?= htmlspecialchars($product['product_name']) ?></h3>
+        <h6 class="text-muted mb-3">หมวดหมู่: <?= htmlspecialchars($product['category_name']) ?></h6>
 
-      <p class="card-text"><?= nl2br(htmlspecialchars($product['description'])) ?></p>
+        <p class="card-text"><?= nl2br(htmlspecialchars($product['description'])) ?></p>
 
-      <p class="product-price mt-3">ราคา: <?= number_format($product['price'], 2) ?> บาท</p>
-      <p class="stock">คงเหลือ: <?= (int)$product['stock'] ?> ชิ้น</p>
+        <p class="product-price mt-3">ราคา: <?= number_format($product['price'], 2) ?> บาท</p>
+        <p class="stock">คงเหลือ: <?= (int) $product['stock'] ?> ชิ้น</p>
 
-      <?php if ($isLoggedIn): ?>
-        <form action="cart.php" method="post" class="mt-3">
-          <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
+        <?php if ($isLoggedIn): ?>
+          <form action="cart.php" method="post" class="mt-3">
+            <input type="hidden" name="product_id" value="<?= $product['product_id'] ?>">
 
-          <label for="quantity" class="form-label">จำนวน:</label>
-          <input type="number" name="quantity" id="quantity"
-                 value="1" min="1" max="<?= (int)$product['stock'] ?>"
-                 class="form-control mb-3" style="max-width: 120px;" required>
+            <label for="quantity" class="form-label">จำนวน:</label>
+            <input type="number" name="quantity" id="quantity" value="1" min="1" max="<?= (int) $product['stock'] ?>"
+              class="form-control mb-3" style="max-width: 120px;" required>
 
-          <button type="submit" class="btn btn-success">🛒 เพิ่มในตะกร้า</button>
-        </form>
-      <?php else: ?>
-        <div class="alert alert-info mt-3">ℹ️ กรุณาเข้าสู่ระบบเพื่อสั่งซื้อสินค้า</div>
-      <?php endif; ?>
+            <button type="submit" class="btn btn-success">🛒 เพิ่มในตะกร้า</button>
+          </form>
+        <?php else: ?>
+          <div class="alert alert-info mt-3">ℹ️ กรุณาเข้าสู่ระบบเพื่อสั่งซื้อสินค้า</div>
+        <?php endif; ?>
+      </div>
     </div>
-  </div>
 
 </body>
+
 </html>
